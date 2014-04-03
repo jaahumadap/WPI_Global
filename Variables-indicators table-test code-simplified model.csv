@@ -1,0 +1,15 @@
+Model Parameter,Indicator parameter,covariate,type of covariate,variable,variable family
+beta[1],w[1],elevation,trap point,psi1,Climate change
+beta[2],w[2],people,trap point,psi1,Human impact
+beta[3],w[3],edge,trap point,psi1,Land use change
+beta[4],w[4],rainfall6,year,gamma,Climate change
+beta[5],w[5],maxtemp6,year,gamma,Climate change
+beta[6],w[6],mintemp6,year,gamma,Climate change
+beta[7],w[7],rainfall6,year,phi,Climate change
+beta[8],w[8],maxtemp6,year,phi,Climate change
+beta[9],w[9],mintemp6,year,phi,Climate change
+beta[10],w[10],people,trap point,gamma,Human impact
+beta[11],w[11],people,trap point,phi,Human impact
+alpha,none,none/intercept,none,psi1,unknown
+alphag,none,none/intercept,none,gamma,unknown
+alphap,none,none/intercept,none,phi,unknown
