@@ -2,6 +2,13 @@
 #create some fake data for a species
 #that is rare
 
+mean.det.prob <- function(spmat){
+  #calculate the observed mean det probability for a species
+  mean(apply(spMat,c(3),sum,na.rm=T)/apply(spMat,c(3),function(x){sum(!is.na(x))}))
+}
+
+
+
 #function to calculate the mode of a distribution
 f.mode<-function(data){
 	qwe<-density(data)
