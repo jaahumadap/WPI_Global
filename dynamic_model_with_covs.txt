@@ -1,5 +1,6 @@
 
     model {
+    # This is not the final model for running the species with covariates - careful!
     
     # Priors for constant parameters
     
