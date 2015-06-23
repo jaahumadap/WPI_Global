@@ -1,0 +1,72 @@
+
+     model {
+    
+    # Priors for constant parameters
+    
+    alpha ~ dnorm(0,0.01)
+    alphap ~ dnorm(0,0.01)
+    alphag ~ dnorm(0,0.01)
+    
+    # Priors for parameters associated with a covariate, but the parameter is time invariant
+    for(i in 1:11){
+    beta[i] ~ dnorm(0,0.01)
+    w[i] ~ dbern(0.5)
+    }
+    
+    
+    #Ecological Model-define gamma and phi
+    
+    for (i in 1:nsite){
+      for (t in 2:nyear){
+        logit(gamma[i,t-1])<- alphag + w[4]*beta[4]*rainfall6[t]
+        + w[5]*beta[5]*maxtemp6[t]
+        + w[6]*beta[6]*mintemp6[t]
+        + w[10]*beta[10]*people[i,t]
+    
+    
+    
+        logit(phi[i,t-1])<-alphap + w[7]*beta[7]*rainfall6[t]
+        + w[8]*beta[8]*maxtemp6[t]
+        + w[9]*beta[9]*mintemp6[t]
+        + w[11]*beta[11]*people[i,t]
+      }
+    }
+    
+    #Ecological Model - define psi1 and subsequent ones
+    for (i in 1:nsite){
+      logit(psi1[i])<-alpha + w[1]*beta[1]*elevation[i,1]
+      + w[2]*beta[2]*people[i,1]
+      + w[3]*beta[3]*edge[i,1]
+    
+      z[i,1] ~ dbern(psi1[i])
+    
+        for (t in 2:nyear){
+          muZ[i,t]<- z[i,t-1]*phi[i,t-1] + (1-z[i,t-1])*gamma[i,t-1]
+          z[i,t] ~ dbern(muZ[i,t])
+        }#t
+      } #i
+    
+    #Observation process - no covariates
+    for(t in 1:nyear){
+      p[t] ~ dunif(0,1)    
+    } #t
+    
+    for (i in 1:nsite){
+      for (j in 1:nrep){
+        for (t in 1:nyear){
+          muy[i,j,t] <- z[i,t]*p[t]
+          y[i,j,t] ~ dbern(muy[i,j,t])
+        } #t
+      } #j
+    } #i
+    
+    # Derived quantities (finite sample estimates)
+    
+    for(t in 1:nyear){
+      psi[t]<-sum(z[1:nsite,t])/nsite
+    }#t
+    
+  }    
+    
+    
+    
