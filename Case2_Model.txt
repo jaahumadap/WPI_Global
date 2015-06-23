@@ -1,0 +1,37 @@
+
+model {
+
+# Specify priors
+psi1 ~ dunif(0, 1) #first year occupancy
+
+phi ~ dunif(0, 1) # apparent survival
+gamma ~ dunif(0, 1) # colonization
+p ~ dunif(0, 1) # detection probability
+
+# Ecological submodel: Define state conditional on parameters
+for (i in 1:nsite){
+   z[i,1] ~ dbern(psi1)
+   for (k in 2:nyear){
+      muZ[i,k]<- z[i,k-1]*phi + (1-z[i,k-1])*gamma
+      z[i,k] ~ dbern(muZ[i,k])
+      } #k
+   } #i
+
+# Observation model
+for (i in 1:nsite){
+   for (j in 1:nrep){
+      for (k in 1:nyear){
+         muy[i,j,k] <- z[i,k]*p
+         y[i,j,k] ~ dbern(muy[i,j,k])
+         } #k
+      } #j
+   } #i
+
+         
+# Derived parameters: Sample occupancy
+
+for (k in 1:nyear){
+   psi[k]<-sum(z[1:nsite,k])/nsite
+   }
+}
+
